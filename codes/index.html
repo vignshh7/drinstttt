@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #dfe9f5; /* Slightly bluer background */
+            color: #2c3e50;
+            padding-top: 21.5px;
+        }
+
+        h1, h2 {
+            font-family: Arial, sans-serif;
+            color: #2c3e50;
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        hr {
+            border: 0;
+            height: 2px;
+            background: #2c3e50;
+            margin: 10px 0;
+        }
+
+        .xx {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .inner {
+            width: 100%;
+            min-height: 400px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .image-container a {
+            text-align: center;
+            text-decoration: none;
+            color: #2c3e50;
+            transition: transform 0.3s ease;
+        }
+
+        .image-container a:hover {
+            transform: scale(1.05);
+        }
+
+        .image-container img {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .image-container p {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        footer {
+            background: #dfe9f5; /* Matching the bluer background */
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        footer p {
+            font-size: 15px;
+            color: #2c3e50;
+        }
+
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 0 5px;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>DRS Institute of Technology</h1>
+    <hr>
+
+    <div class="xx">
+        <div class="inner">
+            <form>
+                <h2>LOGIN</h2>
+                <hr>
+                <br>
+
+                <div class="image-container">
+                    <a href="stulogin.html">
+                        <img src="../images/studentimage.png" alt="Student">
+                        <p>Student</p>
+                    </a>
+                    <a href="admin.html">
+                        <img src="../images/adminimage.png" alt="Admin">
+                        <p>Admin</p>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 DRS Institute Of Technology. All rights reserved.</p>
+        <p>
+            <a href="https://www.facebook.com/" target="_blank">Facebook</a> | 
+            <a href="https://www.instagram.com/" target="_blank">Instagram</a> | 
+            <a href="https://x.com/?lang=en&mx=2" target="_blank">Twitter</a> | 
+            <a href="https://www.linkedin.com/" target="_blank">LinkedIn</a>
+        </p>
+        <p>
+            <a href="alumni.html">Alumni Login</a>
+        </p>
+    </footer>
+</body>
+</html>

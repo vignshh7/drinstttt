@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Dashboard - DRS Institute of Technology</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            color: #2c3e50;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 70px;
+            width: calc(100% - 70px);
+            background: #ffffff;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 2;
+            transition: 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header.expanded {
+            left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header .alumni-name {
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .header .logout-btn {
+            padding: 8px 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .header .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 70px;
+            position: fixed;
+            z-index: 3;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, #2c3e50, #1a252f);
+            transition: 0.3s ease;
+            overflow-x: hidden;
+            padding-top: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidenav.expanded {
+            width: 250px;
+        }
+
+        .sidenav a {
+            padding: 15px 8px 15px 20px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #ecf0f1;
+            display: flex;
+            align-items: center;
+            transition: 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sidenav a:hover {
+            background: #3498db;
+            color: #ffffff;
+        }
+
+        .sidenav a.active {
+            background: #2980b9;
+        }
+
+        .sidenav a i {
+            margin-right: 15px;
+            min-width: 30px;
+        }
+
+        .sidenav .text {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .sidenav.expanded .text {
+            display: inline;
+            opacity: 1;
+        }
+
+        .main {
+            margin-left: 70px;
+            padding: 80px 30px 30px;
+            transition: 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .main.expanded {
+            margin-left: 250px;
+        }
+
+        .section {
+            display: none;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #home { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+        #profile { border-left: 4px solid #e74c3c; }
+        #events { border-left: 4px solid #f1c40f; }
+        #jobs { border-left: 4px solid #2ecc71; }
+        #connect-students { border-left: 4px solid #e67e22; }
+
+        .profile-item, .event-item, .job-item, .message-item {
+            margin-top: 15px;
+        }
+
+        .message-btn {
+            padding: 5px 10px;
+            background: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 300px;
+            height: 400px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: #e67e22;
+            color: white;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chat-header button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .chat-footer {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-footer input {
+            width: 70%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .chat-footer button {
+            padding: 5px 10px;
+            background: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .sidenav { width: 0; }
+            .main { margin-left: 0; }
+            .header { left: 0; width: 100%; }
+            .sidenav.expanded { width: 200px; }
+            .main.expanded { margin-left: 200px; }
+            .header.expanded { left: 200px; width: calc(100% - 200px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header" id="myHeader">
+        <h1 id="headerTitle">DRS Institute of Technology - Alumni Dashboard</h1>
+        <div class="user-info">
+            <span class="alumni-name" id="alumniName">Alex Turner</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="sidenav" id="mySidenav">
+        <a href="#home" class="nav-link active"><i class="fas fa-home"></i><span class="text">Home</span></a>
+        <a href="#profile" class="nav-link"><i class="fas fa-user"></i><span class="text">Profile</span></a>
+        <a href="#events" class="nav-link"><i class="fas fa-calendar"></i><span class="text">Events</span></a>
+        <a href="#jobs" class="nav-link"><i class="fas fa-briefcase"></i><span class="text">Job Postings</span></a>
+        <a href="#connect-students" class="nav-link"><i class="fas fa-comments"></i><span class="text">Connect with Students</span></a>
+    </div>
+
+    <div class="main" id="mainContent">
+        <div id="home" class="section active">
+            <h2>Welcome Back, Alumni!</h2>
+            <p>Stay connected with DRS Institute of Technology, explore opportunities, and engage with our community.</p>
+        </div>
+
+        <div id="profile" class="section">
+            <h2>Your Profile</h2>
+            <p>Update and view your personal details.</p>
+            <div class="profile-item">
+                <p><strong>Name:</strong> Alex Turner</p>
+                <p><strong>Graduation Year:</strong> 2018</p>
+                <p><strong>Degree:</strong> B.Tech in Computer Science</p>
+                <p><strong>Email:</strong> alex.turner@example.com</p>
+                <p><strong>Current Role:</strong> Software Engineer at TechCorp</p>
+                <button class="message-btn" onclick="alert('Profile update feature coming soon!')">Update Profile</button>
+            </div>
+        </div>
+
+        <div id="events" class="section">
+            <h2>Alumni Events</h2>
+            <p>Join upcoming alumni events and reunions.</p>
+            <div class="event-item">
+                <p><strong>Alumni Reunion 2025</strong> - June 15, 2025 <button class="message-btn" style="background: #f1c40f;" onclick="alert('Registered for Alumni Reunion!')">Register</button></p>
+                <p><strong>Tech Talk Series</strong> - April 20, 2025 <button class="message-btn" style="background: #f1c40f;" onclick="alert('Registered for Tech Talk!')">Register</button></p>
+            </div>
+        </div>
+
+        <div id="jobs" class="section">
+            <h2>Job Postings</h2>
+            <p>Explore or post job opportunities for the DRS community.</p>
+            <div class="job-item">
+                <p><strong>Software Developer</strong> - TechCorp <button class="message-btn" style="background: #2ecc71;" onclick="alert('Applied for Software Developer position!')">Apply</button></p>
+                <p><strong>Data Analyst</strong> - DataWorks <button class="message-btn" style="background: #2ecc71;" onclick="alert('Applied for Data Analyst position!')">Apply</button></p>
+                <button class="message-btn" onclick="alert('Job posting feature coming soon!')">Post a Job</button>
+            </div>
+        </div>
+
+        <div id="connect-students" class="section">
+            <h2>Connect with Students</h2>
+            <p>Share your experience and mentor current students.</p>
+            <div class="message-item">
+                <p><strong>John Doe</strong> - 3rd Year, Computer Science <button class="message-btn" onclick="openChat('John Doe')">Message</button></p>
+                <p><strong>Jane Smith</strong> - 2nd Year, Engineering <button class="message-btn" onclick="openChat('Jane Smith')">Message</button></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <span id="chatTitle"></span>
+            <button onclick="closeChat()">✖</button>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('mySidenav').addEventListener('click', function() {
+            this.classList.toggle('expanded');
+            document.getElementById('mainContent').classList.toggle('expanded');
+            document.getElementById('myHeader').classList.toggle('expanded');
+        });
+
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+        const headerTitle = document.getElementById('headerTitle');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sectionId = this.getAttribute('href').substring(1);
+
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === sectionId) {
+                        section.classList.add('active');
+                        headerTitle.textContent = `DRS Institute of Technology - ${section.querySelector('h2').textContent}`;
+                    }
+                });
+            });
+        });
+
+        let currentChatRecipient = '';
+
+        function openChat(recipient) {
+            currentChatRecipient = recipient;
+            const chatWindow = document.getElementById('chatWindow');
+            document.getElementById('chatTitle').textContent = `Chat with ${recipient}`;
+            document.getElementById('chatBody').innerHTML = '';
+            chatWindow.classList.add('active');
+        }
+
+        function closeChat() {
+            document.getElementById('chatWindow').classList.remove('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (message) {
+                const chatBody = document.getElementById('chatBody');
+                chatBody.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+                input.value = '';
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+                setTimeout(() => {
+                    chatBody.innerHTML += `<p><strong>${currentChatRecipient}:</strong> Thanks for reaching out! I'll get back to you soon.</p>`;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        function logout() {
+            window.location.href = 'home.html';
+        }
+
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        window.onload = function() {
+            document.getElementById('alumniName').textContent = "Alex Turner"; // Replace with actual alumni name
+        };
+    </script>
+</body>
+</html>
