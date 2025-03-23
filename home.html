@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - DRS Institute of Technology</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            color: #2c3e50;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 70px;
+            width: calc(100% - 70px);
+            background: #ffffff;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 2;
+            transition: 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header.expanded {
+            left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header .student-name {
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .header .logout-btn {
+            padding: 8px 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .header .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 70px;
+            position: fixed;
+            z-index: 3;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, #2c3e50, #1a252f);
+            transition: 0.3s ease;
+            overflow-x: hidden;
+            padding-top: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidenav.expanded {
+            width: 250px;
+        }
+
+        .sidenav a {
+            padding: 15px 8px 15px 20px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #ecf0f1;
+            display: flex;
+            align-items: center;
+            transition: 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sidenav a:hover {
+            background: #3498db;
+            color: #ffffff;
+        }
+
+        .sidenav a.active {
+            background: #2980b9;
+        }
+
+        .sidenav a i {
+            margin-right: 15px;
+            min-width: 30px;
+        }
+
+        .sidenav .text {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .sidenav.expanded .text {
+            display: inline;
+            opacity: 1;
+        }
+
+        .main {
+            margin-left: 70px;
+            padding: 80px 30px 30px;
+            transition: 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .main.expanded {
+            margin-left: 250px;
+        }
+
+        .section {
+            display: none;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #home { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+        #dashboard { border-left: 4px solid #e74c3c; }
+        #time-table { border-left: 4px solid #2ecc71; }
+        #events { border-left: 4px solid #f1c40f; }
+        #library { border-left: 4px solid #9b59b6; }
+        #faculty { border-left: 4px solid #e67e22; }
+        #alumni-speak { border-left: 4px solid #d35400; }
+
+        .chat-bot {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .chat-bot:hover {
+            transform: scale(1.1);
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px;
+            background: #34495e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s ease;
+            z-index: 3;
+        }
+
+        .dark-mode-toggle:hover {
+            background: #3498db;
+        }
+
+        .dark-mode {
+            background: #1a252f;
+            color: #ecf0f1;
+        }
+
+        .dark-mode .header {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        .dark-mode .section {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        .dark-mode #home {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+        }
+
+        .faculty-item, .alumni-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .message-btn {
+            padding: 5px 10px;
+            background: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #dashboard select, #time-table select {
+            padding: 8px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        #dashboard table, #time-table table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        #dashboard th, #dashboard td, #time-table th, #time-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        #dashboard th, #time-table th {
+            background: #e74c3c;
+            color: white;
+        }
+
+        #time-table th {
+            background: #2ecc71;
+        }
+
+        @media (max-width: 768px) {
+            .sidenav { width: 0; }
+            .main { margin-left: 0; }
+            .header { left: 0; width: 100%; }
+            .sidenav.expanded { width: 200px; }
+            .main.expanded { margin-left: 200px; }
+            .header.expanded { left: 200px; width: calc(100% - 200px); }
+        }
+
+        .library-search {
+            margin-top: 15px;
+        }
+
+        .library-search input {
+            padding: 8px;
+            width: 60%;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .library-search button {
+            padding: 8px 15px;
+            background: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .library-results {
+            margin-top: 15px;
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 80px;
+            right: 30px;
+            width: 300px;
+            height: 400px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: #e67e22;
+            color: white;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chat-header button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .chat-footer {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-footer input {
+            width: 70%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .chat-footer button {
+            padding: 5px 10px;
+            background: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header" id="myHeader">
+        <h1 id="headerTitle">DRS Institute of Technology - Home</h1>
+        <div class="user-info">
+            <span class="student-name" id="studentName">John Doe</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="sidenav" id="mySidenav">
+        <a href="#home" class="nav-link active"><i class="fas fa-home"></i><span class="text">Home</span></a>
+        <a href="#dashboard" class="nav-link"><i class="fas fa-tachometer-alt"></i><span class="text">Dashboard</span></a>
+        <a href="#time-table" class="nav-link"><i class="fas fa-clock"></i><span class="text">Time Table</span></a>
+        <a href="#events" class="nav-link"><i class="fas fa-calendar"></i><span class="text">Events</span></a>
+        <a href="#library" class="nav-link"><i class="fas fa-book-open"></i><span class="text">Library</span></a>
+        <a href="#faculty" class="nav-link"><i class="fas fa-chalkboard-teacher"></i><span class="text">Faculty</span></a>
+        <a href="#alumni-speak" class="nav-link"><i class="fas fa-users"></i><span class="text">Alumni Speak</span></a>
+    </div>
+
+    <div class="main" id="mainContent">
+        <div id="home" class="section active">
+            <h2>Welcome to DRS Institute of Technology</h2>
+            <p>Experience a modern learning environment with cutting-edge technology and innovative teaching methods.</p>
+        </div>
+
+        <div id="dashboard" class="section">
+            <h2>Student Dashboard</h2>
+            <p>View your grades and attendance semester-wise.</p>
+            <select id="semesterSelect" onchange="updateDashboard()">
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+            </select>
+            <table id="dashboardTable">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Marks</th>
+                        <th>Attendance (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="dashboardData"></tbody>
+            </table>
+        </div>
+
+        <div id="time-table" class="section">
+            <h2>Time Table</h2>
+            <p>View your class schedule and registered faculty for each semester.</p>
+            <select id="timetableSelect" onchange="updateTimetable()">
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+            </select>
+            <table id="timetableTable">
+                <thead>
+                    <tr>
+                        <th>Day/Time</th>
+                        <th>Subject</th>
+                        <th>Faculty</th>
+                    </tr>
+                </thead>
+                <tbody id="timetableData"></tbody>
+            </table>
+        </div>
+
+        <div id="events" class="section">
+            <h2>Campus Events</h2>
+            <p>Stay updated with upcoming workshops, seminars, and social events.</p>
+            <div style="margin-top: 15px;">
+                <p><strong>Tech Symposium</strong> - March 25, 2025 <button style="margin-left: 10px; padding: 5px 10px; background: #f1c40f; color: white; border: none; border-radius: 5px;" onclick="alert('Registered for Tech Symposium!')">Register</button></p>
+                <p><strong>Career Fair</strong> - April 10, 2025 <button style="margin-left: 10px; padding: 5px 10px; background: #f1c40f; color: white; border: none; border-radius: 5px;" onclick="alert('Registered for Career Fair!')">Register</button></p>
+                <p><strong>Coding Bootcamp</strong> - April 15, 2025 <button style="margin-left: 10px; padding: 5px 10px; background: #f1c40f; color: white; border: none; border-radius: 5px;" onclick="alert('Registered for Coding Bootcamp!')">Register</button></p>
+                <p><strong>Science Exhibition</strong> - May 1, 2025 <button style="margin-left: 10px; padding: 5px 10px; background: #f1c40f; color: white; border: none; border-radius: 5px;" onclick="alert('Registered for Science Exhibition!')">Register</button></p>
+            </div>
+        </div>
+
+        <div id="library" class="section">
+            <h2>Digital Library</h2>
+            <p>Search and access thousands of e-books, research papers, and educational resources.</p>
+            <div class="library-search">
+                <input type="text" id="bookSearch" placeholder="Search by title, author, or ISBN">
+                <button onclick="searchBooks()">Search</button>
+            </div>
+            <div class="library-results" id="libraryResults"></div>
+        </div>
+
+        <div id="faculty" class="section">
+            <h2>Our Faculty</h2>
+            <p>Meet our world-class educators and researchers.</p>
+            <div style="margin-top: 15px;">
+                <div class="faculty-item"><span>Dr. John Smith - Computer Science</span><button class="message-btn" onclick="openChat('Dr. John Smith')">Message</button></div>
+                <div class="faculty-item"><span>Prof. Jane Doe - Business Studies</span><button class="message-btn" onclick="openChat('Prof. Jane Doe')">Message</button></div>
+                <div class="faculty-item"><span>Dr. Emily Chen - Engineering</span><button class="message-btn" onclick="openChat('Dr. Emily Chen')">Message</button></div>
+                <div class="faculty-item"><span>Prof. Michael Brown - Physics</span><button class="message-btn" onclick="openChat('Prof. Michael Brown')">Message</button></div>
+                <div class="faculty-item"><span>Dr. Sarah Wilson - Mathematics</span><button class="message-btn" onclick="openChat('Dr. Sarah Wilson')">Message</button></div>
+            </div>
+        </div>
+
+        <div id="alumni-speak" class="section">
+            <h2>Alumni Speak</h2>
+            <p>Connect with our successful alumni and learn from their experiences.</p>
+            <div style="margin-top: 15px;">
+                <div class="alumni-item"><span>Alex Turner - Class of 2018</span><button class="message-btn" style="background: #d35400;" onclick="openChat('Alex Turner')">Message</button></div>
+                <div class="alumni-item"><span>Lisa Patel - Class of 2019</span><button class="message-btn" style="background: #d35400;" onclick="openChat('Lisa Patel')">Message</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-bot" id="tarsChatTrigger">
+        <i class="fas fa-comment"></i>
+    </div>
+
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <span id="chatTitle"></span>
+            <button onclick="closeChat()">✖</button>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            var js, fs, d = document, id = "tars-widget-script", b = "https://tars-file-upload.s3.amazonaws.com/bulb/";
+            if (!d.getElementById(id)) {
+                js = d.createElement("script");
+                js.id = id;
+                js.type = "text/javascript";
+                js.src = b + "js/widget.js";
+                fs = d.getElementsByTagName("script")[0];
+                fs.parentNode.insertBefore(js, fs);
+            }
+        })();
+        window.tarsSettings = {
+            "convid": "LJ0fsH",
+            "href": "https://chatbot.hellotars.com/conv/LJ0fsH"
+        };
+
+        const semesterData = {
+            1: [
+                { subject: "Mathematics I", marks: 85, attendance: 92 },
+                { subject: "Physics", marks: 78, attendance: 88 },
+                { subject: "Programming", marks: 90, attendance: 95 }
+            ],
+            2: [
+                { subject: "Mathematics II", marks: 82, attendance: 90 },
+                { subject: "Chemistry", marks: 75, attendance: 85 },
+                { subject: "Data Structures", marks: 88, attendance: 93 }
+            ],
+            3: [
+                { subject: "Algorithms", marks: 87, attendance: 91 },
+                { subject: "Database Systems", marks: 80, attendance: 89 },
+                { subject: "Operating Systems", marks: 84, attendance: 87 }
+            ],
+            4: [
+                { subject: "Software Engineering", marks: 89, attendance: 94 },
+                { subject: "Networks", marks: 83, attendance: 90 },
+                { subject: "AI Basics", marks: 91, attendance: 96 }
+            ]
+        };
+
+        const timetableData = {
+            1: [
+                { dayTime: "Mon 9-10", subject: "Mathematics I", faculty: "Dr. Sarah Wilson" },
+                { dayTime: "Tue 10-11", subject: "Physics", faculty: "Prof. Michael Brown" },
+                { dayTime: "Wed 11-12", subject: "Programming", faculty: "Dr. John Smith" }
+            ],
+            2: [
+                { dayTime: "Mon 9-10", subject: "Mathematics II", faculty: "Dr. Sarah Wilson" },
+                { dayTime: "Tue 10-11", subject: "Chemistry", faculty: "Prof. Michael Brown" },
+                { dayTime: "Wed 11-12", subject: "Data Structures", faculty: "Dr. John Smith" }
+            ],
+            3: [
+                { dayTime: "Mon 9-10", subject: "Algorithms", faculty: "Dr. John Smith" },
+                { dayTime: "Tue 10-11", subject: "Database Systems", faculty: "Dr. Emily Chen" },
+                { dayTime: "Wed 11-12", subject: "Operating Systems", faculty: "Dr. Emily Chen" }
+            ],
+            4: [
+                { dayTime: "Mon 9-10", subject: "Software Engineering", faculty: "Dr. Emily Chen" },
+                { dayTime: "Tue 10-11", subject: "Networks", faculty: "Dr. John Smith" },
+                { dayTime: "Wed 11-12", subject: "AI Basics", faculty: "Prof. Jane Doe" }
+            ]
+        };
+
+        const books = [
+            { title: "Introduction to Algorithms", author: "Thomas H. Cormen", isbn: "9780262033848", pdf: "https://example.com/books/algorithms.pdf" },
+            { title: "Clean Code", author: "Robert C. Martin", isbn: "9780132350884", pdf: "https://example.com/books/cleancode.pdf" },
+            { title: "Artificial Intelligence: A Modern Approach", author: "Stuart Russell", isbn: "9780136042594", pdf: "https://example.com/books/ai.pdf" }
+        ];
+
+        document.getElementById('mySidenav').addEventListener('click', function() {
+            this.classList.toggle('expanded');
+            document.getElementById('mainContent').classList.toggle('expanded');
+            document.getElementById('myHeader').classList.toggle('expanded');
+        });
+
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+        const headerTitle = document.getElementById('headerTitle');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sectionId = this.getAttribute('href').substring(1);
+                
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === sectionId) {
+                        section.classList.add('active');
+                        headerTitle.textContent = `DRS Institute of Technology - ${section.querySelector('h2').textContent}`;
+                        if (sectionId === 'dashboard') updateDashboard();
+                        if (sectionId === 'time-table') updateTimetable();
+                    }
+                });
+            });
+        });
+
+        function updateDashboard() {
+            const semester = document.getElementById('semesterSelect').value;
+            const data = semesterData[semester];
+            const tbody = document.getElementById('dashboardData');
+            tbody.innerHTML = '';
+            data.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${item.subject}</td>
+                        <td>${item.marks}</td>
+                        <td>${item.attendance}%</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateTimetable() {
+            const semester = document.getElementById('timetableSelect').value;
+            const data = timetableData[semester];
+            const tbody = document.getElementById('timetableData');
+            tbody.innerHTML = '';
+            data.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${item.dayTime}</td>
+                        <td>${item.subject}</td>
+                        <td>${item.faculty}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const toggleIcon = document.querySelector('.dark-mode-toggle i');
+            toggleIcon.classList.toggle('fa-moon');
+            toggleIcon.classList.toggle('fa-sun');
+        }
+
+        function searchBooks() {
+            const query = document.getElementById('bookSearch').value.toLowerCase();
+            const results = document.getElementById('libraryResults');
+            results.innerHTML = '';
+
+            const filteredBooks = books.filter(book => 
+                book.title.toLowerCase().includes(query) ||
+                book.author.toLowerCase().includes(query) ||
+                book.isbn.includes(query)
+            );
+
+            filteredBooks.forEach(book => {
+                results.innerHTML += `
+                    <p>${book.title} by ${book.author} (ISBN: ${book.isbn}) 
+                    <a href="${book.pdf}" target="_blank" style="color: #3498db;">Download PDF</a></p>
+                `;
+            });
+
+            if (filteredBooks.length === 0) {
+                results.innerHTML = '<p>No books found.</p>';
+            }
+        }
+
+        let currentChatRecipient = '';
+
+        function openChat(recipient) {
+            currentChatRecipient = recipient;
+            const chatWindow = document.getElementById('chatWindow');
+            document.getElementById('chatTitle').textContent = `Chat with ${recipient}`;
+            document.getElementById('chatBody').innerHTML = '';
+            chatWindow.classList.add('active');
+        }
+
+        function closeChat() {
+            document.getElementById('chatWindow').classList.remove('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (message) {
+                const chatBody = document.getElementById('chatBody');
+                chatBody.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+                input.value = '';
+                chatBody.scrollTop = chatBody.scrollHeight;
+                
+                setTimeout(() => {
+                    chatBody.innerHTML += `<p><strong>${currentChatRecipient}:</strong> Thanks for your message! I'll respond soon.</p>`;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        function logout() {
+            // Redirect to index.html
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        window.onload = function() {
+            updateDashboard();
+            updateTimetable();
+            document.getElementById('studentName').textContent = "John Doe"; // Replace with actual student name
+        };
+    </script>
+</body>
+</html>

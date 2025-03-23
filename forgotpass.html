@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password - DRS Institute of Technology</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #dfe9f5; /* Matching bluer background from index.html */
+            color: #2c3e50; /* Dark blue text */
+            padding-top: 21.5px;
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #2c3e50; /* Dark blue header */
+        }
+
+        h2 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        hr {
+            border: 0;
+            height: 2px;
+            background: #2c3e50; /* Dark blue line */
+            margin: 10px 0;
+        }
+
+        .xx {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .inner {
+            width: 100%;
+            min-height: 400px;
+            background: #ffffff; /* White background like index.html */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Subtle shadow */
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px; /* Spacing between form elements */
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 450px; /* Default width, adjusted for OTP below */
+            height: 35px;
+            padding: 8px;
+            border: 1px solid #2c3e50; /* Dark blue border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 16px;
+            color: #2c3e50;
+            background: #f0f4f8; /* Light gray-blue background */
+        }
+
+        input[type="number"] {
+            width: 300px; /* Specific width for OTP field */
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #3498db; /* Blue focus border */
+            background: #ffffff;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #3498db; /* Blue button like index.html links */
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #2980b9; /* Darker blue on hover */
+        }
+
+        #resend {
+            width: 200px; /* Specific width for Send OTP button */
+        }
+
+        button[a] {
+            width: 150px; /* Specific width for Verify button */
+        }
+
+        a {
+            color: #3498db; /* Blue link color */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #2980b9; /* Darker blue on hover */
+            text-decoration: underline;
+        }
+
+        .home-link {
+            display: block;
+            text-align: right;
+            font-style: italic;
+            padding-right: 4px;
+            color: #e74c3c; /* Red for home link to match original */
+        }
+
+        .home-link:hover {
+            color: #c0392b; /* Darker red on hover */
+        }
+
+        img {
+            vertical-align: middle;
+            width: 25px;
+            height: 25px;
+            margin-left: 5px;
+        }
+
+        p#otpsent1 {
+            color: #2c3e50;
+            font-size: 16px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>DRS Institute of Technology</h1>
+    <hr>
+
+    <div class="xx">
+        <div class="inner">
+            <form>
+                <h2>Forgot Password</h2>
+                <hr>
+                <br>
+
+                <label>Email Address 
+                    <img src="../images/Email-Transparent.png" alt="Email Icon">
+                </label>
+                <input type="text" name="email" value="Enter your email" 
+                    onfocus="clearValue(this)" 
+                    onblur="restoreValue(this, 'Enter your email')">
+
+                <button type="button" id="resend" onclick="otpsent()">Send OTP</button>
+                <p id="otpsent1"></p>
+
+                <label>Enter OTP 
+                    <img src="../images/otp.png" alt="OTP Icon">
+                </label>
+                <input type="number" name="otp" value="Enter OTP" 
+                    onfocus="clearValue(this)" 
+                    onblur="restoreValue(this, 'Enter OTP')">
+
+                <a href="newpass.html"><button type="button">Verify</button></a>
+
+                <a href="index.html" class="home-link"><i>Home Page</i></a>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function otpsent() {
+            document.getElementById("resend").innerHTML = "Resend OTP";
+            document.getElementById("otpsent1").innerHTML = "OTP Sent to the given Email Address!";
+        }
+
+        function clearValue(inputField) {
+            if (inputField.value === 'Enter your email' || inputField.value === 'Enter OTP') {
+                inputField.value = '';
+            }
+        }
+
+        function restoreValue(inputField, placeholder) {
+            if (inputField.value === '') {
+                inputField.value = placeholder;
+            }
+        }
+    </script>
+</body>
+</html>
