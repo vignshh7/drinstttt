@@ -179,48 +179,6 @@
             transform: scale(1.1);
         }
 
-        .dark-mode-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 8px;
-            background: #34495e;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s ease;
-            z-index: 3;
-        }
-
-        .dark-mode-toggle:hover {
-            background: #3498db;
-        }
-
-        .dark-mode {
-            background: #1a252f;
-            color: #ecf0f1;
-        }
-
-        .dark-mode .header {
-            background: #2c3e50;
-            color: #ecf0f1;
-        }
-
-        .dark-mode .section {
-            background: #2c3e50;
-            color: #ecf0f1;
-        }
-
-        .dark-mode #home {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-        }
-
         .faculty-item, .alumni-item {
             display: flex;
             justify-content: space-between;
@@ -476,10 +434,6 @@
         <i class="fas fa-comment"></i>
     </div>
 
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">
-        <i class="fas fa-moon"></i>
-    </button>
-
     <div class="chat-window" id="chatWindow">
         <div class="chat-header">
             <span id="chatTitle"></span>
@@ -623,13 +577,6 @@
             });
         }
 
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const toggleIcon = document.querySelector('.dark-mode-toggle i');
-            toggleIcon.classList.toggle('fa-moon');
-            toggleIcon.classList.toggle('fa-sun');
-        }
-
         function searchBooks() {
             const query = document.getElementById('bookSearch').value.toLowerCase();
             const results = document.getElementById('libraryResults');
@@ -684,7 +631,6 @@
         }
 
         function logout() {
-            // Redirect to index.html
             window.location.href = 'index.html';
         }
 
