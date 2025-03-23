@@ -148,44 +148,6 @@
         #manage-marks { border-left: 4px solid #9b59b6; }
         #contact { border-left: 4px solid #e67e22; }
 
-        .dark-mode-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 8px;
-            background: #34495e;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s ease;
-            z-index: 3;
-        }
-
-        .dark-mode-toggle:hover {
-            background: #3498db;
-        }
-
-        .dark-mode {
-            background: #1a252f;
-            color: #ecf0f1;
-        }
-
-        .dark-mode .header {
-            background: #2c3e50;
-            color: #ecf0f1;
-        }
-
-        .dark-mode .section {
-            background: #2c3e50;
-            color: #ecf0f1;
-        }
-
         h2 {
             font-size: 20px;
             color: #2c3e50;
@@ -260,10 +222,6 @@
         </div>
     </div>
 
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">
-        <i class="fas fa-moon"></i>
-    </button>
-
     <footer>
         <p>© 2025 DRS Institute Of Technology. All rights reserved.</p>
     </footer>
@@ -296,13 +254,6 @@
                 });
             });
         });
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const toggleIcon = document.querySelector('.dark-mode-toggle i');
-            toggleIcon.classList.toggle('fa-moon');
-            toggleIcon.classList.toggle('fa-sun');
-        }
 
         function logout() {
             window.location.href = 'index.html';
